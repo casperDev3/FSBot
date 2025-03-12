@@ -1,16 +1,37 @@
-# This is a sample Python script.
+import asyncio
+import logging
+import sys
+from os import getenv
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from aiogram import Bot, Dispatcher, html
+from aiogram.client.default import DefaultBotProperties
+from aiogram.enums import ParseMode
+from aiogram.filters import CommandStart
+from aiogram.types import Message
+
+# Bot token can be obtained via https://t.me/BotFather
+TOKEN = getenv("BOT_TOKEN")
+dp = Dispatcher()
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+@dp.message(CommandStart())
+async def command_start_handler(message: Message) -> None:
+    await message.answer(f"Hello, {html.bold(message.from_user.full_name)}!")
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+@dp.message()
+async def echo_handler(message: Message) -> None:
+    try:
+        await message.send_copy(chat_id=message.chat.id)
+    except TypeError:
+        await message.answer("Nice try!")
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+async def main() -> None:
+    bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+    await dp.start_polling(bot)
+
+
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+    asyncio.run(main())
