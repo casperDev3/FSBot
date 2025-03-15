@@ -19,7 +19,6 @@ dp = Dispatcher()
 register_handlers(dp)
 
 
-
 @dp.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
     await message.answer(f"Hello, {html.bold(message.from_user.full_name)}!", reply_markup=get_main_keyboard())
