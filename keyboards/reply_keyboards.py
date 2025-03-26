@@ -6,6 +6,7 @@ def get_main_keyboard() -> ReplyKeyboardMarkup:
         keyboard=[
             [KeyboardButton(text="Test")],
             [KeyboardButton(text="Personal data"), KeyboardButton(text="Send Pic")],
+            [KeyboardButton(text="Add Task"), KeyboardButton(text="Show Tasks")],
         ],
         resize_keyboard=True
     )
