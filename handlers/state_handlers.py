@@ -2,8 +2,9 @@ from aiogram import Router, types
 from aiogram.fsm.context import FSMContext
 from states.form_states import Form
 from states.tasks_states import Tasks
+from states.search_states import SearchEmployeeByName
 from utils.tasks import add_new_task
-
+from utils.search import search_employee_by_name
 
 router = Router()
 
@@ -37,4 +38,12 @@ async def tsk_link_handler(message: types.Message, state: FSMContext):
     await state.update_data(link=message.text)
     data = await state.get_data()
     add_new_task(data)
+    await state.clear()
+
+@router.message(SearchEmployeeByName.query)
+async def tsk_link_handler(message: types.Message, state: FSMContext):
+    await state.update_data(query=message.text)
+    data = await state.get_data()
+    msg_text = search_employee_by_name(data['query'])
+    await message.answer(msg_text)
     await state.clear()

@@ -4,6 +4,7 @@ from aiogram.fsm.context import FSMContext
 from pathlib import Path
 from states.form_states import Form
 from states.tasks_states import Tasks
+from states.search_states import SearchEmployeeByName
 import json
 
 router = Router()
@@ -34,3 +35,7 @@ async def show_task_handler(message: types.Message):
     for task in tasks:
         await message.answer(f"{task['title']}", reply_markup=get_inline_mod_tasks(task['id']))
 
+@router.message(lambda message: message.text == "Search by name")
+async def task_handler(message: types.Message, state: FSMContext):
+    await state.set_state(SearchEmployeeByName.query)
+    await message.answer("Enter employee name:")
